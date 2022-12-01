@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Project in CSPL by Eligio R. Bautista III</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+</head>
+<body>
+    <div class="alert alert-info alert-dismissible fade show" style="text-align:center">
+        <strong>FINAL PROJECT IN SYSTEM INTEGRATION & ARCHITECTURE(CSPL)</strong> <br>by Eligio R. Bautista III
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <form id="form-1">
+        <div class="container-fluid">
+            <div class="custom-row" title="Select a method.">
+                <input type="radio" name="method" id="radGet" onclick="CheckOperation()"> Get<br>
+                <input type="radio" name="method" id="radPost" onclick="CheckOperation()"> Post<br>
+            </div>
+    
+            <div class="custom-row" title="Select the first word for the title."> 
+            <input type="radio" name="c1" id="radThe"  value="The"> The<br>
+            <input type="radio" name="c1" id="radHappy"  value="Happy"> Happy<br>
+            <input type="radio" name="c1" id="radSad"  value="Sad"> Sad<br>
+            <input type="radio" name="c1" id="radLazy"  value="Lazy"> Lazy<br>
+            </div>
+
+            <div class="custom-row" title="Select the second word for the title."> 
+            <input type="radio" name="c2" id="radCar"  value="Cat"> Cat<br>
+            <input type="radio" name="c2" id="radDog"  value="Dog"> Dog<br>
+            <input type="radio" name="c2" id="radFox"  value="Fox"> Fox<br>
+            <input type="radio" name="c2" id="radBear" value="Bear"> Bear<br>
+            </div><br>
+            <input type="button" id="btnExecute" onclick="ExecuteOperation()" value="Perform Operation" data-toggle="modal" data-target="#myModal">
+        </div>
+    </form><br>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal body -->
+        <div class="modal-body">
+            <h2 class="modal-title" id="output1" style="text-align:center"></h2>
+            <h3 id="output2"></h3>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">continue</button>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script>
+    async function GetData(){
+        const request = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+        if (!request.ok){
+            throw new Error("Unknown error occured: " + request.statusText);
+        }
+        const data = await request.json();
+        console.log(data);
+        document.getElementById("output1").innerHTML = "OUTPUT:" +  "<hr>";
+        document.getElementById("output2").innerHTML = "Title: " + data.title;
+    }
+
+    async function PostData(){
+        var validation = 0
+        var radios = document.getElementsByName("c1");
+        for (var radio of radios){
+            if (radio.checked){
+                var a = radio.getAttribute("value");
+                validation++;
+            }
+        }
+
+        var radios = document.getElementsByName("c2");
+        for (var radio of radios){
+            if (radio.checked){
+                var b = radio.getAttribute("value");
+                validation++;
+            }
+        }
+
+        var newTitle = a + " " + b;
+        
+        const request = await fetch("https://jsonplaceholder.typicode.com/posts",{
+            method : "POST",
+            body : JSON.stringify({
+                title : newTitle
+            }),
+            headers:{"Content-type":"application/json"}
+        });
+
+        if(!request.ok){
+            throw new Error("Unknown error occured: " + request.statusText);
+        }
+        const data = await request.json()
+        console.log(data)
+        document.getElementById("output1").innerHTML = "OUTPUT:" +  "<hr>";
+        document.getElementById("output2").innerHTML = "Title: " + data.title;
+
+        if (validation < 2){
+            document.getElementById("output1").innerHTML = "Incomplete Values" +  "<hr>";
+            document.getElementById("output2").innerHTML = "Please check your inputs and try again.";
+        } 
+    }
+
+    function CheckOperation(){
+        if (document.getElementById("radGet").checked){
+            document.getElementById("output1").innerHTML = "";
+            document.getElementById("output2").innerHTML = "";
+
+            var radios = document.getElementsByName("c1");
+            for (var radio of radios){
+                radio.disabled = true;
+                radio.checked = false;
+            }
+
+            var radios = document.getElementsByName("c2");
+            for (var radio of radios){
+                radio.disabled = true; 
+                radio.checked = false;
+            }
+        }
+        else if (document.getElementById("radPost").checked){
+            var radios = document.getElementsByName("c1");
+            for (var radio of radios){
+                radio.disabled = false;
+                radio.checked = false;
+            }
+            var radios = document.getElementsByName("c2");
+            for (var radio of radios){
+                radio.disabled = false;
+                radio.checked = false;
+            }
+        }
+    }
+
+    function ExecuteOperation(){
+        // Check if user selected a method
+        if (document.getElementById("radGet").checked == false && document.getElementById("radPost").checked == false){
+            document.getElementById("output1").innerHTML = "Incomplete Values" +  "<hr>";
+            document.getElementById("output2").innerHTML = "Please select a method to continue.";
+        }
+
+        if (document.getElementById("radGet").checked){
+            GetData();
+        }
+        else if (document.getElementById("radPost").checked){
+            PostData(); 
+        }
+    }
+
+    var radios = document.getElementsByName("c1");
+    for (var radio of radios){
+        radio.disabled = true;
+        radio.checked = false;
+    }
+
+    var radios = document.getElementsByName("c2");
+    for (var radio of radios){
+        radio.disabled = true; 
+        radio.checked = false;
+    }
+</script>
+
+</html>

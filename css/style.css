@@ -1,0 +1,43 @@
+* {
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.custom-row {
+    border: 1px solid rgba(60, 60, 60, 0.50) ;
+    padding: 15px 5px 15px 5px ;
+    margin: 5px 0px 0px 0px ;
+    transition: box-shadow 0.10s, font-size 0.10s ;
+}
+
+.custom-row:hover {
+    font-size: 18px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,0.80);
+    padding: 15px 5px 15px 5px;
+    margin: 5px 0px 0px 0px;
+}
+
+#btnExecute{
+    border: 1px solid rgb(60,60,60,60);
+    border-radius: 3px; 
+    transition: background-color 0.10s, color 0.10s;   
+    padding: 3px 3px 3px 3px;
+    font-size: 15px;   
+    transition: padding 0.30s, font-size 0.30s;    
+}
+
+#btnExecute:hover {
+    background-color:#4267B2;
+    color:white;
+    border: 1px solid rgb(60,60,60,60);
+    cursor: pointer;
+    padding: 5px 5px 5px 5px;
+    font-size: 16px;       
+}
+
+input[type="radio"]:hover{
+    cursor: pointer;
+}
+
+#warning-method {
+    display: none;
+}
